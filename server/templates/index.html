@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+DB SYS Project
+{% endblock %}
+
+{% block body %}
+<h1>Welcome to <span id="project"></span></h1>
+<hr>
+<h3>Stack used in this project</h3>
+<ul>
+  {% for stack in stacks %}
+  <li>{{ stack }}</li>
+  {% endfor %}
+</ul>
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}
