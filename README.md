@@ -67,10 +67,48 @@ flask run
 pipenv run gunicorn -w 4 -b 127.0.0.1:5000 server.wsgi:app
 ```
 
+### Setting up web application
+
+** Go inside frontend folder **
+
+#### Prerequisite
+
+* Install Node.js
+* Install yarn
+
+#### Setting up environment
+
+```sh
+# Install dependencies
+yarn install
+```
+
+#### Running development server
+
+```sh
+# Start server
+yarn serve
+```
+
+#### Deploy to production
+
+```sh
+# Compile
+yarn build
+```
+
+### A little note
+* Please put all static inside public folder of frontend folder since the production build will automatically put all file to the server when deploy in production mode.
+
 ### Coding style guide
+
+#### For Python
 
 1. Use snake_case for function, method and variable name. Ex. foo_bar, ant_cat_dog
 2. Use PascalCase for class name. Ex. FooBar, AntCatDog
 3. 4 Tab spaces for every python files.
 4. Use space instead of tab character for indentation. (Python usually produce parsing error if we mix tabs and spaces).
 5. Just install editorconfig plugin for your code editor and everything should be okay.
+
+#### For Vue.js
+* Please follow rule from "Prettier" code formatter.

@@ -1,11 +1,7 @@
-from flask import Blueprint, render_template, jsonify
+from flask import Blueprint, jsonify
 from server.db import connection
 
-index_bp = Blueprint('index', __name__)
-
-@index_bp.route('/', methods=('GET',))
-def index_handler():
-    return render_template('index.html', stacks=['Python', 'Flask', 'MySQL'])
+index_bp = Blueprint('index', __name__, url_prefix='/api')
 
 @index_bp.route('/test-json', methods=('GET',))
 def test_json_handler():
