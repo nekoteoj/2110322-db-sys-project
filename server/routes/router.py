@@ -2,14 +2,14 @@ import os
 
 from flask import send_file, send_from_directory, url_for
 from flask_cors import CORS
-from .index import index_bp
+from . import index
 
 STATIC_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../static')
 
 def init_route(app):
     CORS(app)
 
-    app.register_blueprint(index_bp)
+    app.register_blueprint(index.bp)
 
     @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>')
