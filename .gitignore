@@ -108,3 +108,6 @@ venv.bak/
 
 # Vue js generated production file
 server/static/
+
+# OSX DS_Store
+.DS_Store
