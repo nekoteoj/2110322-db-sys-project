@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from server.db import connection
-from server.models import seller_to_dict, item_to_dict
+from server.models import row_to_dict
 
 bp = Blueprint('index', __name__, url_prefix='/api')
 
@@ -31,17 +31,100 @@ def get_item():
     row = cursor.fetchone()
     if row is None:
         response = jsonify({'error': 'No item found'})
+        response.status_code = 404
+        return response
+    return jsonify(row_to_dict(cursor.description, row))
+
+@bp.route('/item', methods=('POST',))
+def create_item():
+    description = request.form.get('description')
+    price = request.form.get('price')
+    product_name = request.form.get('product_name')
+    product_brand = request.form.get('product_brand')
+    supplier = request.form.get('supplier')
+    quantity = request.form.get('quantity')
+    category_id = request.form.get('category_id')
+    seller_ssn = request.form.get('seller_ssn')
+    if price is None or product_name is None or product_brand is None or supplier is None or quantity is None or category_id is None or seller_ssn is None:
+        response = jsonify({'error': 'Not enough parameters'})
         response.status_code = 400
         return response
-    return jsonify(item_to_dict(row))
+    db = connection.get_db()
+    cursor = db.cursor()
+    cursor.execute('INSERT INTO item VALUES (NULL, %s, %s, %s, %s, NOW(), NOW(), %s, %s, %s, %s)',
+        [description, price, product_name, product_brand, supplier, quantity, category_id, seller_ssn]
+    )
+    db.commit()
+    return jsonify({'status': 'OK'})
+
+@bp.route('/item', methods=('PUT',))
+def edit_item():
+    item_id = request.form.get('id')
+    description = request.form.get('description')
+    price = request.form.get('price')
+    product_name = request.form.get('product_name')
+    product_brand = request.form.get('product_brand')
+    supplier = request.form.get('supplier')
+    quantity = request.form.get('quantity')
+    category_id = request.form.get('category_id')
+    seller_ssn = request.form.get('seller_ssn')
+    if item_id is None:
+        response = jsonify({'error': 'Not enough parameters'})
+        response.status_code = 400
+        return response
+    cols = []
+    data = []
+    if description is not None:
+        cols.append('description')
+        data.append(description)
+    if price is not None:
+        cols.append('price')
+        data.append(price)
+    if product_name is not None:
+        cols.append('product_name')
+        data.append(product_name)
+    if product_brand is not None:
+        cols.append('product_brand')
+        data.append(product_brand)
+    if supplier is not None:
+        cols.append('supplier')
+        data.append(supplier)
+    if quantity is not None:
+        cols.append('quantity')
+        data.append(quantity)
+    if category_id is not None:
+        cols.append('category_id')
+        data.append(category_id)
+    if seller_ssn is not None:
+        cols.append('seller_ssn')
+        data.append(seller_ssn)
+    db = connection.get_db()
+    cursor = db.cursor()
+    cursor.execute('UPDATE item SET time_updated=NOW()' + ''.join([', ' + e + '=%s' for e in cols]) + ' WHERE id = %s',data + [item_id])
+    db.commit()
+    return jsonify({'status': 'OK'})
+
+
+@bp.route('/item', methods=('DELETE',))
+def delete_item():
+    item_id = request.form.get('id')
+    if item_id is None:
+        response = jsonify({'error': 'Invalid request'})
+        response.status_code = 400
+        return response
+    db = connection.get_db()
+    cursor = db.cursor()
+    cursor.execute('DELETE FROM item WHERE id = %s', [item_id])
+    db.commit()
+    return jsonify({'status': 'OK'})
 
 @bp.route('/seller')
 def get_sellers():
     db = connection.get_db()
     cursor = db.cursor()
     cursor.execute('SELECT * FROM seller')
-    rows = cursor.fetchmany()
-    return jsonify([seller_to_dict(row) for row in rows])
+    rows = cursor.fetchall()
+    return jsonify([row_to_dict(cursor.description, row) for row in rows])
 
 @bp.route('/seller/items', methods=('GET',))
 def get_seller_items():
@@ -53,5 +136,5 @@ def get_seller_items():
     db = connection.get_db()
     cursor = db.cursor()
     cursor.execute('SELECT * FROM item WHERE seller_ssn = %s', [seller_ssn])
-    rows = cursor.fetchmany()
-    return jsonify([item_to_dict(row) for row in rows])
+    rows = cursor.fetchall()
+    return jsonify([row_to_dict(cursor.description, row) for row in rows])
