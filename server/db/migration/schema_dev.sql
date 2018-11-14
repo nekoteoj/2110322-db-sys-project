@@ -22,8 +22,8 @@ CONSTRAINT DATE_CHECK CHECK(time_updated<=NOW() AND time_registered<=NOW())
 );
 
 create table ITEM (
-id INT UNSIGNED NOT NULL,
-description TEXT NOT NULL,
+id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+description TEXT,
 price DOUBLE UNSIGNED NOT NULL,
 product_name VARCHAR(50) NOT NULL,
 product_brand VARCHAR(20) NOT NULL,
@@ -99,7 +99,7 @@ CONSTRAINT DATE_CHECK CHECK(time_created<=NOW())
 );
 
 create table ORDERS (
-id INT UNSIGNED NOT NULL,
+id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 status INT NOT NULL,
 time_created DATETIME NOT NULL,
 customer_ssn CHAR(13) NOT NULL,
@@ -120,7 +120,7 @@ CONSTRAINT DATE_CHECK CHECK(time_created<=NOW())
 );
 
 create table PROMOTION (
-id INT UNSIGNED NOT NULL,
+id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 title VARCHAR(80) NOT NULL,
 description TEXT NOT NULL,
 discount_percent DOUBLE,
@@ -130,7 +130,7 @@ CONSTRAINT DISCOUNT_CHECK CHECK(discount_percent>=0.0 AND discount_percent<=100.
 );
 
 create table MESSAGE (
-id INT UNSIGNED NOT NULL,
+id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 content TEXT NOT NULL,
 time_sent DATETIME NOT NULL,
 message_mode BOOLEAN NOT NULL,
