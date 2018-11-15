@@ -1,7 +1,9 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
-import TestServer from "./views/TestServer";
+import TestServer from "./views/TestServer.vue";
+import Login from "./views/Login.vue";
+import { auth } from "./models/auth";
 
 Vue.use(Router);
 
@@ -12,7 +14,8 @@ export default new Router({
     {
       path: "/",
       name: "home",
-      component: Home
+      component: Home,
+      beforeEnter: auth
     },
     {
       path: "/about",
@@ -27,6 +30,11 @@ export default new Router({
       path: "/test-server",
       name: "test-server",
       component: TestServer
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: Login
     }
   ]
 });

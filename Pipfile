@@ -12,6 +12,9 @@ pylint = "*"
 mysql-connector = "*"
 gunicorn = "*"
 flask-cors = "*"
+flask-jwt = "*"
+pyjwt = "*"
+bcrypt = "*"
 
 [dev-packages]
 
