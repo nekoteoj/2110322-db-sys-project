@@ -2,7 +2,7 @@ import os
 
 from flask import send_file, send_from_directory, url_for
 from flask_cors import CORS
-from . import index
+from . import index, auth
 
 STATIC_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../static')
 
@@ -10,6 +10,7 @@ def init_route(app):
     CORS(app)
 
     app.register_blueprint(index.bp)
+    app.register_blueprint(auth.bp)
 
     @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>')
