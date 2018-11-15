@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from server.db import connection
-from server.models import row_to_dict
+from server.models import row_to_dict, rows_to_dict_list
 
 bp = Blueprint('index', __name__, url_prefix='/api')
 
@@ -22,18 +22,18 @@ def test_db_handler():
 def get_item():
     item_id = request.args.get('id')
     if item_id is None:
-        response = jsonify({'error': 'Invalid request'})
-        response.status_code = 400
-        return response
+        return 'Bad request', 400
     db = connection.get_db()
     cursor = db.cursor()
     cursor.execute('SELECT * FROM item WHERE id = %s', [item_id])
     row = cursor.fetchone()
     if row is None:
-        response = jsonify({'error': 'No item found'})
-        response.status_code = 404
-        return response
-    return jsonify(row_to_dict(cursor.description, row))
+        return 'Not found', 404
+    result = row_to_dict(cursor.description, row)
+    cursor.execute('SELECT image_url FROM item_image WHERE item_id = %s', [item_id])
+    rows = cursor.fetchall()
+    result['images'] = [e[0] for e in rows]
+    return jsonify(result)
 
 @bp.route('/item', methods=('POST',))
 def create_item():
@@ -124,7 +124,7 @@ def get_sellers():
     cursor = db.cursor()
     cursor.execute('SELECT * FROM seller')
     rows = cursor.fetchall()
-    return jsonify([row_to_dict(cursor.description, row) for row in rows])
+    return jsonify(rows_to_dict_list(cursor.description, rows))
 
 @bp.route('/seller/items', methods=('GET',))
 def get_seller_items():
@@ -137,4 +137,4 @@ def get_seller_items():
     cursor = db.cursor()
     cursor.execute('SELECT * FROM item WHERE seller_ssn = %s', [seller_ssn])
     rows = cursor.fetchall()
-    return jsonify([row_to_dict(cursor.description, row) for row in rows])
+    return jsonify(rows_to_dict_list(cursor.description, rows))
