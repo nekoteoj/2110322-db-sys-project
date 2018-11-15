@@ -1,9 +1,17 @@
 import router from "@/router";
+import api from "./api_manager";
 
 export function login(username, password) {
-  sessionStorage.setItem("username", username);
-  sessionStorage.setItem("password", password);
-  router.push({ name: "home" });
+  api
+    .login(username, password)
+    .then(res => {
+      sessionStorage.setItem("accessToken", res.data.accessToken);
+      router.push({ name: "home" });
+    })
+    .catch(error => {
+      console.log(error);
+      router.push({ path: "login" });
+    });
 }
 
 export function logout() {
@@ -12,10 +20,7 @@ export function logout() {
 }
 
 export const auth = (to, from, next) => {
-  const username = sessionStorage.getItem("username");
-  const password = sessionStorage.getItem("password");
-  console.log(username, password);
-  if (username && password) {
+  if (sessionStorage.getItem("accessToken")) {
     next();
   } else {
     next("/login");

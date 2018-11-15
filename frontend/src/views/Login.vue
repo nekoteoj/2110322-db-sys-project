@@ -1,24 +1,34 @@
 <template>
-<div>
-  <b-container id="login-block" fluid>
-    <b-row class="margin">
-      <b-col><h3>Login</h3></b-col>
-    </b-row>
-    <b-row class="margin">
-      <b-col sm="3"><label for="username">Username</label></b-col>
-      <b-col sm="9"><b-form-input type="text" id="username" v-model.trim="username"></b-form-input></b-col>
-    </b-row>
-    <b-row class="margin">
-      <b-col sm="3"><label for="password">Password</label></b-col>
-      <b-col sm="9"><b-form-input type="password" id="password" v-model.trim="password"></b-form-input></b-col>
-    </b-row>
-    <b-row>
-      <b-col sm="12">
-        <b-button variant="primary" class="right" @click="onLoginClick()">Login</b-button>
-      </b-col>
-    </b-row>
-  </b-container>
-</div>
+  <div>
+    <form novalidate class="md-layout" @submit.prevent="onLoginClick">
+      <md-card class="md-layout-item md-size-100 md-small-size-100">
+        <md-card-header>
+          <div class="md-title"><md-icon>person</md-icon> Login</div>
+        </md-card-header>
+
+        <md-card-content>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-size-100 md-small-size-100">
+              <md-field>
+                <label for="username">Username</label>
+                <md-input name="username" class="inputBgOpaque" id="username" v-model="username"/>
+              </md-field>
+            </div>
+
+            <div class="md-layout-item md-size-100 md-small-size-100">
+              <md-field>
+                <label for="last-name">Password</label>
+                <md-input type="password" name="password" id="password" v-model="password"/>
+              </md-field>
+            </div>
+          </div>
+        </md-card-content>
+        <md-card-actions>
+          <md-button type="submit" class="md-raised md-primary"><md-icon>arrow_forward_ios</md-icon> Login</md-button>
+        </md-card-actions>
+      </md-card>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -41,6 +51,13 @@ export default {
 </script>
 
 <style scoped>
+form {
+  margin: auto;
+  max-width: 500px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
 #login-block {
   max-width: 500px;
   background-color: white;
@@ -56,5 +73,9 @@ export default {
 
 .right {
   float: right;
+}
+
+.inputBgOpaque:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 100px white inset;
 }
 </style>

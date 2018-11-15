@@ -2,7 +2,7 @@
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
     <HelloWorld msg="Welcome to DB SYS Project App!"/>
-    <b-button variant="danger" @click="onLogoutClick()">Logout</b-button>
+    <md-button class="md-raised md-accent" @click="onLogoutClick">Logout</md-button>
   </div>
 </template>
 

@@ -19,11 +19,11 @@ axios.defaults.baseURL = "http://localhost:5000/";
 
 export default {
   name: "test-server",
-  data: function () {
+  data: function() {
     return {
       database: "",
       json: ""
-    }
+    };
   },
   created: function() {
     axios
@@ -31,7 +31,7 @@ export default {
       .then(response => {
         this.database = response.data;
       })
-      .catch(error => {
+      .catch(() => {
         this.database = "Server Error";
       });
     axios
@@ -39,7 +39,7 @@ export default {
       .then(response => {
         this.json = response.data;
       })
-      .catch(error => {
+      .catch(() => {
         this.json = "Server Error";
       });
   }
