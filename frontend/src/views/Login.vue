@@ -24,6 +24,7 @@
           </div>
         </md-card-content>
         <md-card-actions>
+          <md-button class="md-raised" to="/register" style="margin-right:10px;">Register</md-button>
           <md-button type="submit" class="md-raised md-primary"><md-icon>arrow_forward_ios</md-icon> Login</md-button>
         </md-card-actions>
       </md-card>
