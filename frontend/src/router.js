@@ -1,8 +1,10 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
-import TestServer from "./views/TestServer.vue";
 import Login from "./views/Login.vue";
+import NewItem from "./views/NewItem.vue";
+import EditItem from "./views/EditItem.vue";
+import ShowItem from "./views/ShowItem.vue";
 import { auth } from "./models/auth";
 
 Vue.use(Router);
@@ -18,23 +20,29 @@ export default new Router({
       beforeEnter: auth
     },
     {
-      path: "/about",
-      name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/About.vue")
-    },
-    {
-      path: "/test-server",
-      name: "test-server",
-      component: TestServer
-    },
-    {
       path: "/login",
       name: "login",
       component: Login
+    },
+    {
+      path: "/new-item",
+      name: "new-item",
+      component: NewItem,
+      beforeEnter: auth
+    },
+    {
+      path: "/edit-item/:id",
+      name: "edit-item",
+      component: EditItem,
+      props: true,
+      beforeEnter: auth
+    },
+    {
+      path: "/show-item/:id",
+      name: "show-item",
+      component: ShowItem,
+      props: true,
+      beforeEnter: auth
     }
   ]
 });

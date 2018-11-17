@@ -1,5 +1,6 @@
 import axios from "axios";
 import qs from "qs";
+import { getToken } from "./auth";
 import { baseUrl } from "@/config.js";
 
 class APIManager {
@@ -7,15 +8,20 @@ class APIManager {
     this.baseUrl = baseUrl;
   }
 
-  login(username, password) {
-    return axios.post(
-      this.baseUrl + "/auth/login",
-      qs.stringify({ username, password })
-    );
+  post(url, data, auth = false) {
+    const config = {};
+    if (auth) {
+      config.headers = { Authorization: "Bearer " + getToken() };
+    }
+    return axios.post(baseUrl + url, qs.stringify(data), config);
   }
 
-  getSellers() {
-    return axios.get(this.baseUrl + "/seller");
+  get(url, data, auth = false) {
+    const config = { params: data };
+    if (auth) {
+      config.headers = { Authorization: "Bearer " + getToken() };
+    }
+    return axios.get(baseUrl + url, config);
   }
 }
 
