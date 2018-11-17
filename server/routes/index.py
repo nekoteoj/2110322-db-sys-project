@@ -118,6 +118,19 @@ def delete_item():
     db.commit()
     return jsonify({'status': 'OK'})
 
+@bp.route('/category')
+def get_category():
+    category_id = request.args.get('id')
+    if not category_id:
+        return 'Bad request', 400
+    db = connection.get_db()
+    cursor = db.cursor()
+    cursor.execute('SELECT * FROM category where id = %s', [category_id])
+    row = cursor.fetchone()
+    if not row:
+        return 'Not found', 404
+    return jsonify(row_to_dict(cursor.description, row))
+
 @bp.route('/seller')
 def get_sellers():
     db = connection.get_db()
@@ -137,4 +150,9 @@ def get_seller_items():
     cursor = db.cursor()
     cursor.execute('SELECT * FROM item WHERE seller_ssn = %s', [seller_ssn])
     rows = cursor.fetchall()
-    return jsonify(rows_to_dict_list(cursor.description, rows))
+    result = rows_to_dict_list(cursor.description, rows)
+    for item in result:
+        cursor.execute('SELECT image_url FROM item_image WHERE item_id = %s', [item['id']])
+        rows = cursor.fetchall()
+        item['images'] = [e[0] for e in rows]
+    return jsonify(result)

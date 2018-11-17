@@ -11,13 +11,13 @@ export function login(username, password) {
     })
     .catch(error => {
       console.log(error);
-      router.push({ path: "login" });
+      router.push({ name: "login" });
     });
 }
 
 export function logout() {
   sessionStorage.clear();
-  router.push({ path: "login" });
+  router.push({ name: "login" });
 }
 
 export function getToken() {

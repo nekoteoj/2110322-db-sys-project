@@ -16,7 +16,6 @@ def login():
     print(request.get_json())
     username = request.form.get('username')
     password = request.form.get('password')
-    print(username, password)
     if not username or not password:
         return 'Bad request paramaters', 400
     db = connection.get_db()
