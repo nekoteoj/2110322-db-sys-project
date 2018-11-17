@@ -23,6 +23,20 @@ class APIManager {
     }
     return axios.get(baseUrl + url, config);
   }
+
+  delete(url, data, auth = false) {
+    const config = {
+      data: qs.stringify(data)
+    };
+    if (auth) {
+      config.headers = { Authorization: "Bearer " + getToken() };
+    }
+    return axios({
+      url: baseUrl + url,
+      method: "DELETE",
+      ...config
+    });
+  }
 }
 
 export default new APIManager(baseUrl);

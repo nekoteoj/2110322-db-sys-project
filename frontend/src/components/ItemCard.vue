@@ -13,21 +13,29 @@
 
         <md-card-actions>
           <md-button class="md-icon-button md-dense" aria-label="Edit" @click.stop="editItem()"><md-icon>edit</md-icon></md-button>
-          <md-button class="md-icon-button md-dense" aria-label="Delete" @click.stop="deleteItem()"><md-icon >delete</md-icon></md-button>
+          <md-button class="md-icon-button md-dense" aria-label="Delete" @click.stop="active = true"><md-icon >delete</md-icon></md-button>
         </md-card-actions>
       </md-card-area>
     </md-card>
+    <md-dialog-confirm
+      :md-active.sync="active"
+      md-title="Delete Item?"
+      :md-content="`${item.product_name} will be deleted.`"
+      @md-confirm="onDeleteConfirm()"/>
   </div>
 </template>
 
 <script>
+import itemRepository from "@/models/item_repository";
+
 export default {
   props: ["item"],
   data: function() {
     return {
       images: [require("@/assets/img/no-img.png")],
       handle: 0,
-      index: 0
+      index: 0,
+      active: false
     };
   },
   methods: {
@@ -37,8 +45,15 @@ export default {
     editItem() {
       this.$router.push(`/edit-item/${this.item.id}`);
     },
-    deleteItem() {
-      console.log("Delete Item");
+    onDeleteConfirm() {
+      itemRepository
+        .deleteById(this.item.id)
+        .then(() => {
+          this.$emit("deleted", this.item);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   created: function() {

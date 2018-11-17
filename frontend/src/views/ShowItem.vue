@@ -45,11 +45,16 @@
             </md-table-row>
           </md-table>
           <md-button class="right md-raised md-primary" :to="`/edit-item/${id}`">Edit</md-button>
-          <md-button class="right md-raised md-accent">Delete</md-button>
+          <md-button class="right md-raised md-accent" @click="active = true">Delete</md-button>
           <md-button class="md-raised" to="/">Back to list</md-button>
         </div>
       </div>
     </md-card>
+    <md-dialog-confirm
+      :md-active.sync="active"
+      md-title="Delete Item?"
+      :md-content="`${item.product_name} will be deleted.`"
+      @md-confirm="onDeleteConfirm()"/>
   </div>
 </template>
 
@@ -71,8 +76,19 @@ export default {
     return {
       item: {},
       images: [require("@/assets/img/no-img.png")],
-      category: {}
+      category: {},
+      active: false
     };
+  },
+  methods: {
+    onDeleteConfirm() {
+      itemRepository
+        .deleteById(this.item.id)
+        .then(() => this.$router.push({ name: "home" }))
+        .catch(err => {
+          console.log(err);
+        });
+    }
   },
   created: function() {
     itemRepository
