@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  props: ['item'],
+  props: ["item"],
   data: function() {
     return {
       images: [require("@/assets/img/no-img.png")],
@@ -32,10 +32,10 @@ export default {
   },
   methods: {
     showItem() {
-      this.$router.push(`/show-item/${ this.item.id }`);
+      this.$router.push(`/show-item/${this.item.id}`);
     },
     editItem() {
-      this.$router.push(`/edit-item/${ this.item.id }`);
+      this.$router.push(`/edit-item/${this.item.id}`);
     },
     deleteItem() {
       console.log("Delete Item");
@@ -67,7 +67,7 @@ export default {
 
 .item-img {
   display: block;
-  max-height: 125px;
+  height: 125px;
   width: auto;
   margin: auto;
 }

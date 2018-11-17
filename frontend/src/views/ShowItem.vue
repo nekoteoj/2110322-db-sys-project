@@ -4,7 +4,7 @@
     <md-card class="content">
       <div class="md-layout">
         <div class="md-layout-item md-small-size-100" id="col-container">
-          <Carousel :per-page="1" :loop="true" :mouse-drag="false" :navigationEnabled="true" :autoplay="true" :centerMode="true">
+          <Carousel :per-page="1" :loop="true" :mouse-drag="true" :navigationEnabled="true" :autoplay="true" :centerMode="true">
             <Slide v-for="(image, index) in images" :key="index">
               <img class="item-img" :src="image" alt="Item Image">
             </Slide>
@@ -45,7 +45,8 @@
             </md-table-row>
           </md-table>
           <md-button class="right md-raised md-primary" :to="`/edit-item/${id}`">Edit</md-button>
-          <md-button class="right md-raised" to="/">Back to list</md-button>
+          <md-button class="right md-raised md-accent">Delete</md-button>
+          <md-button class="md-raised" to="/">Back to list</md-button>
         </div>
       </div>
     </md-card>

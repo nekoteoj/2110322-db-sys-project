@@ -20,6 +20,13 @@ export function logout() {
   router.push({ name: "login" });
 }
 
+export function register(form) {
+  api
+    .post("/auth/register", form)
+    .then(() => router.push({ name: "login" }))
+    .catch(err => console.log(err));
+}
+
 export function getToken() {
   return sessionStorage.getItem("accessToken");
 }
