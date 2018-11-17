@@ -1,25 +1,66 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to DB SYS Project App!"/>
-    <md-button class="md-raised md-accent" @click="onLogoutClick">Logout</md-button>
+    <NavBar/>
+    <div class="title md-headline">Your items</div>
+    <div class="md-layout content">
+      <ItemCard v-for="item in items" :item="item" :key="item.id" class="md-layout-item item-card"/>
+    </div>
+    <md-button aria-label="New" class="md-fab md-primary md-fab-bottom-right md-fixed" to="/new-item">
+        <md-icon>add</md-icon>
+    </md-button>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
-import { logout } from "@/models/auth";
+import NavBar from "@/components/NavBar";
+import ItemCard from "@/components/ItemCard";
+import { authData } from "@/models/auth";
+import itemRepository from "@/models/item_repository";
 
 export default {
   name: "home",
   components: {
-    HelloWorld
+    NavBar,
+    ItemCard
   },
-  methods: {
-    onLogoutClick() {
-      logout();
+  data: function() {
+    return {
+      items: []
+    };
+  },
+  created: function() {
+    const ssn = authData().ssn;
+    if (!ssn) {
+      return;
     }
+    itemRepository
+      .getBySeller(ssn)
+      .then(res => {
+        this.items = res.data;
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 };
 </script>
+
+<style scoped>
+.title {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.content {
+  align-items: center;
+  justify-content: center;
+}
+
+.item-card {
+  margin: 10px;
+}
+
+.home {
+  margin-bottom: 100px;
+}
+</style>
