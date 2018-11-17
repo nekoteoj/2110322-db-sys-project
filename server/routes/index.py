@@ -109,9 +109,14 @@ def edit_item():
 def delete_item():
     item_id = request.form.get('id')
     if item_id is None:
-        response = jsonify({'error': 'Invalid request'})
-        response.status_code = 400
-        return response
+        data = str(request.data, 'utf-8').split('=')
+        try:
+            index = data.index('id')
+            item_id = data[index + 1]
+        except:
+            response = jsonify({'error': 'Invalid request'})
+            response.status_code = 400
+            return response
     db = connection.get_db()
     cursor = db.cursor()
     cursor.execute('DELETE FROM item WHERE id = %s', [item_id])

@@ -3,7 +3,7 @@
     <NavBar/>
     <div class="title md-headline">Your items</div>
     <div class="md-layout content">
-      <ItemCard v-for="item in items" :item="item" :key="item.id" class="md-layout-item item-card"/>
+      <ItemCard v-for="item in items" :item="item" :key="item.id" @deleted="onItemDeleted" class="md-layout-item item-card"/>
     </div>
     <md-button aria-label="New" class="md-fab md-primary md-fab-bottom-right md-fixed" to="/new-item">
         <md-icon>add</md-icon>
@@ -27,6 +27,11 @@ export default {
     return {
       items: []
     };
+  },
+  methods: {
+    onItemDeleted(item) {
+      this.items.splice(this.items.indexOf(item), 1);
+    }
   },
   created: function() {
     const ssn = authData().ssn;
