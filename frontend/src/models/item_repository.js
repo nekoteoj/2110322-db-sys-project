@@ -9,6 +9,10 @@ class ItemRepository {
     return api.get("/seller/items", { ssn }, true);
   }
 
+  createItem(data) {
+    return api.post("/item", data, true);
+}
+
   deleteById(id) {
     return api.delete("/item", { id }, true);
   }
