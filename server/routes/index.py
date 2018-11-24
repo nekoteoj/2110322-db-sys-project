@@ -45,6 +45,7 @@ def create_item():
     quantity = request.form.get('quantity')
     category_id = request.form.get('category_id')
     seller_ssn = request.form.get('seller_ssn')
+    images = request.form.get('images')
     if price is None or product_name is None or product_brand is None or supplier is None or quantity is None or category_id is None or seller_ssn is None:
         response = jsonify({'error': 'Not enough parameters'})
         response.status_code = 400
@@ -54,6 +55,12 @@ def create_item():
     cursor.execute('INSERT INTO item VALUES (NULL, %s, %s, %s, %s, NOW(), NOW(), %s, %s, %s, %s)',
         [description, price, product_name, product_brand, supplier, quantity, category_id, seller_ssn]
     )
+    item_id = cursor.lastrowid
+    if images is not None:
+        images = images.split('|||')
+        for image in images:
+            if len(image) > 0:
+                cursor.execute('INSERT INTO item_image VALUES (%s, %s)', [item_id, image])
     db.commit()
     return jsonify({'status': 'OK'})
 
@@ -68,6 +75,7 @@ def edit_item():
     quantity = request.form.get('quantity')
     category_id = request.form.get('category_id')
     seller_ssn = request.form.get('seller_ssn')
+    images = request.form.get('images')
     if item_id is None:
         response = jsonify({'error': 'Not enough parameters'})
         response.status_code = 400
@@ -101,6 +109,12 @@ def edit_item():
     db = connection.get_db()
     cursor = db.cursor()
     cursor.execute('UPDATE item SET time_updated=NOW()' + ''.join([', ' + e + '=%s' for e in cols]) + ' WHERE id = %s',data + [item_id])
+    if images is not None:
+        images = images.split('|||')
+        cursor.execute('DELETE FROM item_image WHERE item_id = %s', [item_id])
+        for image in images:
+            if len(image) > 0:
+                cursor.execute('INSERT INTO item_image VALUES (%s, %s)', [item_id, image])
     db.commit()
     return jsonify({'status': 'OK'})
 
