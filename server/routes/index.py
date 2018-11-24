@@ -123,6 +123,16 @@ def delete_item():
     db.commit()
     return jsonify({'status': 'OK'})
 
+@bp.route('/category/all')
+def get_all_category():
+    db = connection.get_db()
+    cursor = db.cursor()
+    cursor.execute('SELECT * FROM category')
+    rows = cursor.fetchall()
+    if not rows:
+        return 'Not found', 404
+    return jsonify(rows_to_dict_list(cursor.description, rows))
+
 @bp.route('/category')
 def get_category():
     category_id = request.args.get('id')
