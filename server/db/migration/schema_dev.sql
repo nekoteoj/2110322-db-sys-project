@@ -4,7 +4,7 @@ USE `db_sys_development`;
 create table CATEGORY (
 id INT UNSIGNED NOT NULL,
 name VARCHAR(50) NOT NULL,
-description  TEXT,
+description TEXT,
 PRIMARY KEY(id)
 );
 
@@ -15,8 +15,8 @@ lastname VARCHAR(80) NOT NULL,
 description TEXT,
 time_registered DATETIME NOT NULL,
 time_updated DATETIME NOT NULL,
-username VARCHAR(50) NOT NULL,
-password_hash CHAR(64) NOT NULL,
+username VARCHAR(50) NOT NULL UNIQUE,
+password_hash VARCHAR(255) NOT NULL,
 PRIMARY KEY(ssn),
 CONSTRAINT DATE_CHECK CHECK(time_updated<=NOW() AND time_registered<=NOW())
 );
@@ -64,8 +64,8 @@ create table CUSTOMER (
 ssn CHAR(13) NOT NULL,
 firstname VARCHAR(80) NOT NULL,
 lastname VARCHAR(80) NOT NULL,
-username VARCHAR(50) NOT NULL,
-password_hash CHAR(64) NOT NULL,
+username VARCHAR(50) NOT NULL UNIQUE,
+password_hash VARCHAR(255) NOT NULL,
 PRIMARY KEY(ssn)
 );
 
