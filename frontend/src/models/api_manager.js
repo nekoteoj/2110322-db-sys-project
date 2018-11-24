@@ -24,6 +24,14 @@ class APIManager {
     return axios.get(baseUrl + url, config);
   }
 
+  put(url, data, auth = false) {
+    const config = {};
+    if (auth) {
+      config.headers = { Authorization: "Bearer " + getToken() };
+    }
+    return axios.put(baseUrl + url, qs.stringify(data), config);
+  }
+
   delete(url, data, auth = false) {
     const config = {
       data: qs.stringify(data)
