@@ -23,7 +23,6 @@
       </md-card>
     </form>
     <md-dialog-alert
-    <md-dialog-alert
       :md-active.sync="error"
       md-title="Error"
       md-content="Error: Cannot register" />
