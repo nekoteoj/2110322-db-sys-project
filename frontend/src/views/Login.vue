@@ -29,6 +29,10 @@
         </md-card-actions>
       </md-card>
     </form>
+    <md-dialog-alert
+      :md-active.sync="error"
+      md-content="Error: Invalid username or password"
+      md-confirm-text="OK" />
   </div>
 </template>
 
@@ -39,13 +43,18 @@ export default {
   name: "login",
   data: function() {
     return {
+      error: false,
       username: "",
       password: ""
     };
   },
   methods: {
     onLoginClick() {
-      login(this.username, this.password);
+      login(this.username, this.password).catch(error => {
+        if (error.response.status == 400) {
+          this.error = true;
+        }
+      });
     }
   }
 };

@@ -22,6 +22,11 @@
         </md-card-actions>
       </md-card>
     </form>
+    <md-dialog-alert
+    <md-dialog-alert
+      :md-active.sync="error"
+      md-title="Error"
+      md-content="Error: Cannot register" />
   </div>
 </template>
 
@@ -32,6 +37,7 @@ export default {
   name: "register",
   data: function() {
     return {
+      error: false,
       fields: [
         "username",
         "password",
@@ -56,7 +62,10 @@ export default {
   },
   methods: {
     onRegisterClick() {
-      register(this.form);
+      register(this.form).catch(error => {
+        console.log(error);
+        this.error = true;
+      });
     }
   }
 };

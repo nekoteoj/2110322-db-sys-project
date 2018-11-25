@@ -3,15 +3,11 @@ import jwtDecode from "jwt-decode";
 import api from "./api_manager";
 
 export function login(username, password) {
-  api
+  return api
     .post("/auth/login", { username, password })
     .then(res => {
       sessionStorage.setItem("accessToken", res.data.accessToken);
       router.push({ name: "home" });
-    })
-    .catch(error => {
-      console.log(error);
-      router.push({ name: "login" });
     });
 }
 
@@ -21,10 +17,9 @@ export function logout() {
 }
 
 export function register(form) {
-  api
+  return api
     .post("/auth/register", form)
     .then(() => router.push({ name: "login" }))
-    .catch(err => console.log(err));
 }
 
 export function getToken() {
