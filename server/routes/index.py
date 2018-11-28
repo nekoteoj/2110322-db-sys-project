@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from server.db import connection
+from server.db import connection, injection
 from server.models import row_to_dict, rows_to_dict_list
 
 bp = Blueprint('index', __name__, url_prefix='/api')
@@ -108,7 +108,11 @@ def edit_item():
         data.append(seller_ssn)
     db = connection.get_db()
     cursor = db.cursor()
-    cursor.execute('UPDATE item SET time_updated=NOW()' + ''.join([', ' + e + '=%s' for e in cols]) + ' WHERE id = %s',data + [item_id])
+    # For SQL Injection
+    sql = 'UPDATE item SET time_updated=NOW()' + ''.join([', ' + e + f'="{data[i]}"' for i, e in enumerate(cols)]) + f" WHERE id = {item_id}"
+    print(sql)
+    injection.execute(sql)
+    # cursor.execute('UPDATE item SET time_updated=NOW()' + ''.join([', ' + e + '=%s' for e in cols]) + ' WHERE id = %s',data + [item_id])
     if images is not None:
         images = images.split('|||')
         cursor.execute('DELETE FROM item_image WHERE item_id = %s', [item_id])
