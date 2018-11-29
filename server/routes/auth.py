@@ -16,16 +16,13 @@ def login():
     print(request.get_json())
     username = request.form.get('username')
     password = request.form.get('password')
+    print(username, password)
     if not username or not password:
         return 'Bad request paramaters', 400
     db = connection.get_db()
     cursor = db.cursor()
-    #cursor.execute('SELECT * FROM seller WHERE username = %s' % (username), multi=True)
-#
-    cursor.execute("SELECT * FROM seller WHERE username = \"pawin35\" and (UPDATE seller set password_hash=\"pppp\" where username= \"pawin35\");")
-    db.commit()
+    cursor.execute('SELECT * FROM seller WHERE username = %s', [username])
     row = cursor.fetchone()
-    print('SELECT * FROM seller WHERE username = %s' % (username))
     if not row:
         return 'user not found', 404
     user = row_to_dict(cursor.description, row)
